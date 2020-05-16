@@ -1,2 +1,2 @@
 # multivariate-DFA
-DFA for multivariate data
+DFA for multivariate data in R
