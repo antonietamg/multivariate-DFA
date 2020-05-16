@@ -19,7 +19,7 @@ dfa_function <- function(x){
   notas <- x[,2:ncol(x)]
   temp <- x[,1]
   
-  integrate.serie <- function(x) {       #funcion para integrar la serie
+  integrate.serie <- function(x) {       #integrate series
     p <- cumsum((x)-mean(x))
     return(p)
   }
@@ -37,7 +37,7 @@ dfa_function <- function(x){
     
     tam = nrow(x)            
     
-    n = 4                     #n??mero m??nimo de cajas - me dice cu??ntas escalas voy a tener
+    n = 4                     #min value boxes - how many scales i'll get
     
     tmax = trunc((tam/n), digits=0)
     tmin = 6
@@ -52,7 +52,7 @@ dfa_function <- function(x){
     dats <- as.numeric(dats$tmin.tmax)
     
     for (s in 1:ndats){
-      nu[s] = (trunc(tam/dats[s])-1) #se calcula cuantos bloques de s elementos pueden obtenerse.
+      nu[s] = (trunc(tam/dats[s])-1) # computes how many chunks of "s" elements I can get. 
       Fn = tam
     }
     my_list <- list("tmax"=tmax, "tmin"=tmin, "N"=N, "dats"=dats, "ndats"=ndats, "Fn"=Fn, "si"=si, "fu"=fu, "nu"=nu, "s"=s )
@@ -107,7 +107,7 @@ dfa_function <- function(x){
         
       }
       
-      #ESTE BLOQUE CALCULA EL AJUSTE POLINOMIAL Y RESTA EL POLINOMIO
+      #POLYNOMIAL ADJUSTMENT & SUBSTRACTION
       
       coef1 <- mapply(x = dfbt, y = dfb, FUN = function(x, y) polyfit(x, y, 1)) # el numero es el grado del polinomio
       coef1 <- data.frame(coef1)
