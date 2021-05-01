@@ -1,3 +1,5 @@
+dplot <- dfa_function(x, pol, sec)
+
 plotdfa <- ggplot(dplot, aes(x=sx, y=fx)) + 
   #stat_smooth(method='lm', formula = y~poly(x,1), col="steelblue1")+
   geom_point(col="firebrick2")+
