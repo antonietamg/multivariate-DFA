@@ -4,5 +4,4 @@ Multi_DFA (multivariate DFA) in R adapted from https://github.com/spiralizing/In
 
 Check the sample file to see how time series data must be organized to run this function.
 
-To run this function you will need the get_scale_function.R
-https://github.com/antonietamg/get_scale_DFA
+
