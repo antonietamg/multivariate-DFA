@@ -97,6 +97,12 @@ This script:
 - creates `colored_noise_test.csv` with columns `time, white, pink, brown, blue`
 - runs DFA on each signal with shared `pol = 1` and shared scales (`n_scales = 20`)
 - writes `colored_noise_alpha_results.csv` with expected vs estimated alpha values
+- saves one diagnostic figure per color:
+  - `colored_noise_white_diagnostic.png`
+  - `colored_noise_pink_diagnostic.png`
+  - `colored_noise_brown_diagnostic.png`
+  - `colored_noise_blue_diagnostic.png`
+    (left panel: log-log power spectrum, right panel: DFA log-log plot)
 
 Expected alpha reference (approximate):
 
@@ -104,3 +110,5 @@ Expected alpha reference (approximate):
 - pink noise: ~1.0
 - brown noise: ~1.5
 - blue noise: ~0.0
+
+Note: blue noise can show larger alpha deviations in finite-length samples because anti-correlated signals are more sensitive to scale range and detrending choices.
