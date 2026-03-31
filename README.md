@@ -10,6 +10,8 @@ https://github.com/spiralizing/InfoSeries.jl/blob/master/src/func_series.jl
 - `plot_dfa.R`: helper function to plot DFA output (`log(s)` vs `log(F(s))`).
 - `run_dfa.R`: complete runnable example using the sample CSV.
 - `helper_dfa_params.R`: helper to compare `(pol, n_scales)` combinations and rank them.
+- `colored_noise_utils.R`: utilities to generate white/pink/brown/blue noise signals.
+- `run_colored_noise_demo.R`: demo that generates colored-noise test data and estimates alpha for each noise type.
 - `todasvocesRESC.csv`: sample multivariate time-series input.
 
 ## Input format
@@ -81,3 +83,24 @@ out$best     # top-ranked row
 ```
 
 If one combination fails (for example, a singular fit inside DFA), the helper now marks that row with `status = "error"` and stores the message in `error` instead of stopping the full search.
+
+## Colored-noise validation demo
+
+You can generate test signals (white, pink, brown, blue noise) and run DFA on each:
+
+```bash
+Rscript run_colored_noise_demo.R
+```
+
+This script:
+
+- creates `colored_noise_test.csv` with columns `time, white, pink, brown, blue`
+- runs DFA on each signal with shared `pol = 1` and shared scales (`n_scales = 20`)
+- writes `colored_noise_alpha_results.csv` with expected vs estimated alpha values
+
+Expected alpha reference (approximate):
+
+- white noise: ~0.5
+- pink noise: ~1.0
+- brown noise: ~1.5
+- blue noise: ~0.0
