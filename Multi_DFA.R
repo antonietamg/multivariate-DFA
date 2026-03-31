@@ -152,12 +152,13 @@ dfa_function <- function(x, pol, sec){ # x = dataframe; pol = polynomial; sec = 
   # get the final values
   
   bin_func <- function(x){
-     alpha_val <<- x[[1]]
+     alpha_val <- x[[1]]
      sx = x[[2]]
      fx = x[[3]]
      dplot <- data.frame()
      dplot <- data.frame(cbind(sx, fx))
-     return(dplot)
+     my_list <- list("dplot" = dplot, "alpha" = as.numeric(alpha_val[1]))
+     return(my_list)
   }
   
    bin_func <- cmpfun(bin_func)
