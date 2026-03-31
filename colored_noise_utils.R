@@ -17,18 +17,20 @@ normalize_series <- function(x) {
 colored_noise_fft <- function(n, beta) {
   if (n < 8) stop("n must be >= 8")
 
-  # Frequency-domain shaping. Amplitude scales as f^(-beta/2).
+  # Frequency-domain shaping.
+  # Expected power scales as 1/f^beta, so amplitude scales as f^(-beta/2).
   freqs <- 1:floor(n / 2)
-  amp <- freqs ^ (-beta / 2)
-
-  # Random phases in [0, 2*pi).
-  phases <- runif(length(freqs), min = 0, max = 2 * pi)
+  amp <- freqs^(-beta / 2)
 
   # Build full Hermitian spectrum to obtain real-valued signal.
   spectrum <- complex(length = n)
   spectrum[1] <- 0 + 0i
 
-  pos <- amp * exp(1i * phases)
+  # Use complex Gaussian coefficients (not fixed-magnitude coefficients)
+  # so each realization has realistic spectral variability.
+  real_part <- stats::rnorm(length(freqs))
+  imag_part <- stats::rnorm(length(freqs))
+  pos <- (real_part + 1i * imag_part) * amp / sqrt(2)
   spectrum[freqs + 1] <- pos
 
   if (n %% 2 == 0) {

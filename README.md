@@ -103,6 +103,7 @@ This script:
   - `colored_noise_brown_diagnostic.png`
   - `colored_noise_blue_diagnostic.png`
     (left panel: log-log power spectrum, right panel: DFA log-log plot)
+  - spectrum fit now uses the central frequency band (5% to 95%) for a more stable `beta_est`
 
 Expected alpha reference (approximate):
 
@@ -112,3 +113,4 @@ Expected alpha reference (approximate):
 - blue noise: ~0.0
 
 Note: blue noise can show larger alpha deviations in finite-length samples because anti-correlated signals are more sensitive to scale range and detrending choices.
+Also, colored-noise generation uses random complex Fourier coefficients (not fixed magnitudes), so pink and brown spectra should have distinct slopes but realistic variability between runs.

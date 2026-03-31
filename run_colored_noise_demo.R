@@ -34,6 +34,7 @@ power_spectrum_df <- function(signal) {
 plot_diagnostics <- function(signal_name, signal, dplot, expected_alpha, estimated_alpha) {
   spec <- power_spectrum_df(signal)
   out_file <- sprintf("colored_noise_%s_diagnostic.png", signal_name)
+  beta_expected <- c(white = 0, pink = 1, brown = 2, blue = -1)[[signal_name]]
 
   grDevices::png(out_file, width = 1400, height = 600, res = 140)
   graphics::par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3.2, 1.5))
@@ -45,12 +46,19 @@ plot_diagnostics <- function(signal_name, signal, dplot, expected_alpha, estimat
     xlab = "log10(frequency)", ylab = "log10(power)",
     main = sprintf("%s noise - Power spectrum", signal_name)
   )
-  spec_fit <- stats::lm(log10(power) ~ log10(freq), data = spec)
+  # Fit on central spectral band to reduce edge effects.
+  lo <- stats::quantile(spec$freq, probs = 0.05)
+  hi <- stats::quantile(spec$freq, probs = 0.95)
+  spec_mid <- spec[spec$freq >= lo & spec$freq <= hi, , drop = FALSE]
+  spec_fit <- stats::lm(log10(power) ~ log10(freq), data = spec_mid)
   graphics::abline(spec_fit, col = "firebrick3", lwd = 2)
   beta_est <- -as.numeric(stats::coef(spec_fit)[2])
   graphics::legend(
     "topright",
-    legend = sprintf("beta_est = %.3f", beta_est),
+    legend = c(
+      sprintf("beta_est = %.3f", beta_est),
+      sprintf("beta_exp = %.3f", beta_expected)
+    ),
     bty = "n", text.col = "firebrick3"
   )
 
