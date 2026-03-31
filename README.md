@@ -79,3 +79,5 @@ out <- choose_dfa_params(
 out$results  # all combinations sorted by R^2
 out$best     # top-ranked row
 ```
+
+If one combination fails (for example, a singular fit inside DFA), the helper now marks that row with `status = "error"` and stores the message in `error` instead of stopping the full search.

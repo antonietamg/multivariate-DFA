@@ -25,29 +25,48 @@ choose_dfa_params <- function(
   for (pol in pol_values) {
     for (n_scales in n_scales_values) {
       sec <- get_scale(x[[signal_col]], n_scales)
-      result <- dfa_function(x, pol = pol, sec = sec)
+      run <- tryCatch(
+        {
+          result <- dfa_function(x, pol = pol, sec = sec)
+          dplot <- result$dplot
+          alpha <- result$alpha
 
-      dplot <- result$dplot
-      alpha <- result$alpha
+          fit <- lm(fx ~ sx, data = dplot)
+          r2 <- summary(fit)$r.squared
 
-      fit <- lm(fx ~ sx, data = dplot)
-      r2 <- summary(fit)$r.squared
-
-      rows[[idx]] <- data.frame(
-        pol = pol,
-        n_scales = n_scales,
-        unique_scales = length(sec),
-        alpha = alpha,
-        r2 = r2
+          data.frame(
+            pol = pol,
+            n_scales = n_scales,
+            unique_scales = length(sec),
+            alpha = alpha,
+            r2 = r2,
+            status = "ok",
+            error = NA_character_
+          )
+        },
+        error = function(e) {
+          data.frame(
+            pol = pol,
+            n_scales = n_scales,
+            unique_scales = length(sec),
+            alpha = NA_real_,
+            r2 = NA_real_,
+            status = "error",
+            error = conditionMessage(e)
+          )
+        }
       )
+
+      rows[[idx]] <- run
       idx <- idx + 1
     }
   }
 
   results <- do.call(rbind, rows)
-  results <- results[order(-results$r2), ]
+  results <- results[order(results$status != "ok", -results$r2), ]
   rownames(results) <- NULL
 
-  best <- results[1, ]
+  ok_rows <- results[results$status == "ok", , drop = FALSE]
+  best <- if (nrow(ok_rows) > 0) ok_rows[1, , drop = FALSE] else NULL
   return(list(results = results, best = best))
 }
